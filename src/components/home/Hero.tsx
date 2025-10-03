@@ -1,10 +1,18 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Hero() {
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900 text-white">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
-        <div className="absolute inset-0 bg-black opacity-40"></div>
+    <section className="relative w-full min-h-screen flex items-center justify-center text-white">
+      <div className="absolute inset-0">
+        <Image
+          src="/images/homepage/hero-bg.jpg"
+          alt="Our church community worshiping together"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black opacity-50"></div>
       </div>
 
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4">

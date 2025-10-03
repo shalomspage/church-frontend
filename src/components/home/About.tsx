@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function About() {
   return (
@@ -53,32 +54,50 @@ export default function About() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-4">
-              <div className="relative h-48 rounded-xl overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center group hover:scale-105 transition-transform duration-300">
-                <div className="text-center text-white">
-                  <div className="text-4xl mb-2">⛪</div>
-                  <div className="text-lg font-semibold">Worship Services</div>
-                  <div className="text-blue-100 text-sm mt-1">Sundays 10AM</div>
+              <div className="relative h-48 rounded-xl overflow-hidden group">
+                <Image
+                  src="/images/homepage/worship-service.jpg"
+                  alt="Sunday worship service at our church"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4">
+                  <span className="text-white font-semibold text-sm">Worship Service</span>
                 </div>
               </div>
-              <div className="relative h-32 rounded-xl overflow-hidden bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center group hover:scale-105 transition-transform duration-300">
-                <div className="text-center text-white">
-                  <div className="text-3xl mb-1">👥</div>
-                  <div className="text-md font-semibold">Community</div>
+              <div className="relative h-32 rounded-xl overflow-hidden group">
+                <Image
+                  src="/images/homepage/community.jpg"
+                  alt="Church community fellowship and connection"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4">
+                  <span className="text-white font-semibold text-sm">Community</span>
                 </div>
               </div>
             </div>
             <div className="space-y-4 pt-8">
-              <div className="relative h-32 rounded-xl overflow-hidden bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center group hover:scale-105 transition-transform duration-300">
-                <div className="text-center text-white">
-                  <div className="text-3xl mb-1">🙏</div>
-                  <div className="text-md font-semibold">Prayer</div>
+              <div className="relative h-32 rounded-xl overflow-hidden group">
+                <Image
+                  src="/images/homepage/prayer-group.jpg"
+                  alt="Prayer group gathering and intercession"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4">
+                  <span className="text-white font-semibold text-sm">Prayer</span>
                 </div>
               </div>
-              <div className="relative h-48 rounded-xl overflow-hidden bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center group hover:scale-105 transition-transform duration-300">
-                <div className="text-center text-white">
-                  <div className="text-4xl mb-2">📖</div>
-                  <div className="text-lg font-semibold">Bible Study</div>
-                  <div className="text-purple-100 text-sm mt-1">Wednesdays 7PM</div>
+              <div className="relative h-48 rounded-xl overflow-hidden group">
+                <Image
+                  src="/images/homepage/bible-study.jpg"
+                  alt="Bible study and discipleship group"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4">
+                  <span className="text-white font-semibold text-sm">Bible Study</span>
                 </div>
               </div>
             </div>
