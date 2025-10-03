@@ -14,7 +14,9 @@ import {
   Newspaper,
   Heart,
   Calendar,
-  DollarSign
+  DollarSign,
+  Users,
+  Bell // ADD THIS IMPORT
 } from 'lucide-react'
 import type { RootState } from '@/redux/store'
 
@@ -31,14 +33,28 @@ export default function Navbar() {
     setIsMenuOpen(false)
   }
 
-  const navItems = [
+  // Define base navigation items for all users
+  const baseNavItems = [
     { path: '/', label: 'Home', icon: Church },
-    { path: '/dashboard', label: 'Dashboard', icon: User },
     { path: '/news', label: 'News', icon: Newspaper },
     { path: '/prayer', label: 'Prayer', icon: Heart },
     { path: '/events', label: 'Events', icon: Calendar },
+    
     { path: '/donations', label: 'Give', icon: DollarSign },
   ]
+
+  // Define authenticated user navigation items
+  const authNavItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: User },
+    { path: '/notifications', label: 'Notifications', icon: Bell },
+    { path: '/profile', label: 'Profile', icon: User },
+    { path: '/workers', label: 'Staff', icon: Users },
+  ]
+
+  // Combine navigation items based on authentication status
+  const navItems = isAuthenticated 
+    ? [...baseNavItems, ...authNavItems] 
+    : baseNavItems
 
   const isActivePath = (path: string) => {
     if (path === '/') return pathname === '/'
