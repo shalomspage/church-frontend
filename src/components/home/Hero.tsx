@@ -6,7 +6,7 @@ export default function Hero() {
     <section className="relative w-full min-h-screen flex items-center justify-center text-white">
       <div className="absolute inset-0">
         <Image
-          src="/images/homepage/hero-bg.jpg"
+          src="/images/homepage/hero-bg.avif"
           alt="Our church community worshiping together"
           fill
           className="object-cover"
