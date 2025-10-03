@@ -23,6 +23,12 @@ const registerSchema = z.object({
 
 type RegisterFormData = z.infer<typeof registerSchema>
 
+interface ApiError {
+  data?: {
+    message?: string
+  }
+}
+
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -41,14 +47,16 @@ export default function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const { confirmPassword, ...registerData } = data
+      // Remove confirmPassword before sending to API
+      const { confirmPassword: _confirmPassword, ...registerData } = data
       const result = await register(registerData).unwrap()
       dispatch(setCredentials(result))
       router.push('/dashboard')
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const apiError = error as ApiError
       setError('root', {
         type: 'manual',
-        message: error?.data?.message || 'Registration failed. Please try again.',
+        message: apiError?.data?.message || 'Registration failed. Please try again.',
       })
     }
   }

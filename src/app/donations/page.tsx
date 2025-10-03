@@ -1,4 +1,4 @@
-import { DollarSign, Heart, Target, Users } from 'lucide-react'
+import { DollarSign, Users } from 'lucide-react'
 
 export default function DonationsPage() {
   const campaigns = [
