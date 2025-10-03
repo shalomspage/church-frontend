@@ -1,112 +1,207 @@
-import { Heart, Users, Clock, MessageCircle } from 'lucide-react'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { prayerAgent, PrayerSuggestion, PrayerRequest } from '@/lib/agents/prayerAgent'
+import { contentModerator } from '@/lib/agents/contentModerator'
+import { Heart, Lightbulb, BookOpen } from 'lucide-react'
+
+// Mock prayer history for development
+const mockPrayerHistory: PrayerRequest[] = [
+  {
+    id: '1',
+    title: 'Family healing',
+    content: 'Praying for my family health',
+    category: 'healing',
+    isPublic: true,
+    userId: 'user1',
+    createdAt: new Date('2024-01-15')
+  },
+  {
+    id: '2', 
+    title: 'Guidance at work',
+    content: 'Need wisdom for work decisions',
+    category: 'guidance',
+    isPublic: false,
+    userId: 'user1',
+    createdAt: new Date('2024-01-10')
+  }
+];
 
 export default function PrayerPage() {
-  const prayerRequests = [
-    {
-      id: 1,
-      title: 'Healing for Brother James',
-      description: 'Pray for complete healing and recovery from surgery.',
-      requestedBy: 'Sister Sarah',
-      date: '2 hours ago',
-      prayerCount: 24,
-      isUrgent: true
-    },
-    {
-      id: 2,
-      title: 'Guidance for Youth Ministry',
-      description: 'Pray for wisdom in planning upcoming youth events.',
-      requestedBy: 'Brother Mike',
-      date: '1 day ago',
-      prayerCount: 15,
-      isUrgent: false
-    },
-    {
-      id: 3,
-      title: 'Family Restoration',
-      description: 'Pray for reconciliation and healing in the Johnson family.',
-      requestedBy: 'Anonymous',
-      date: '3 days ago',
-      prayerCount: 42,
-      isUrgent: false
+  const [suggestions, setSuggestions] = useState<PrayerSuggestion[]>([])
+  const [selectedSuggestion, setSelectedSuggestion] = useState<PrayerSuggestion | null>(null)
+  const [prayerContent, setPrayerContent] = useState('')
+  const [isModerating, setIsModerating] = useState(false)
+
+  useEffect(() => {
+    loadPrayerSuggestions()
+  }, [])
+
+  const loadPrayerSuggestions = async () => {
+    try {
+      const prayerSuggestions = await prayerAgent.suggestPrayerTopics(mockPrayerHistory)
+      setSuggestions(prayerSuggestions)
+    } catch (error) {
+      console.error('Failed to load prayer suggestions:', error)
+      // Fallback suggestions
+      setSuggestions([
+        {
+          topic: "Gratitude and Thanksgiving",
+          bibleVerse: "Philippians 4:6",
+          prompt: "Reflect on recent blessings and express gratitude",
+          category: 'thanksgiving'
+        },
+        {
+          topic: "Divine Guidance", 
+          bibleVerse: "Proverbs 3:5-6",
+          prompt: "Seek wisdom for decisions and direction",
+          category: 'guidance'
+        },
+        {
+          topic: "Healing and Restoration",
+          bibleVerse: "James 5:16",
+          prompt: "Pray for physical and emotional healing",
+          category: 'healing'
+        }
+      ])
     }
-  ]
+  }
+
+  const handleSuggestionSelect = async (suggestion: PrayerSuggestion) => {
+    setSelectedSuggestion(suggestion)
+    try {
+      const prompt = await prayerAgent.generatePrayerPrompt(suggestion.category)
+      setPrayerContent(prompt)
+    } catch (error) {
+      console.error('Failed to generate prayer prompt:', error)
+      // Fallback prompt
+      setPrayerContent(`Heavenly Father, I come to you with ${suggestion.topic.toLowerCase()}. Please guide me and bless this situation according to your will. Amen.`)
+    }
+  }
+
+  const handleSubmitPrayer = async () => {
+    if (!prayerContent.trim()) return;
+
+    setIsModerating(true)
+    
+    try {
+      // Moderate content before submission
+      const moderationResult = await contentModerator.moderateContent(prayerContent, 'prayer')
+      
+      if (!moderationResult.isApproved) {
+        alert(`Please review your prayer: ${moderationResult.suggestedChanges?.join(', ')}`)
+        setIsModerating(false)
+        return
+      }
+
+      // Submit prayer (your existing API call)
+      console.log('Submitting prayer:', prayerContent)
+      // Add your API call here
+      
+      // Reset form
+      setPrayerContent('')
+      setSelectedSuggestion(null)
+      alert('Prayer submitted successfully!')
+      
+    } catch (error) {
+      console.error('Failed to submit prayer:', error)
+      alert('Failed to submit prayer. Please try again.')
+    } finally {
+      setIsModerating(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Prayer Wall
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Join our community in prayer. Share your requests and pray for others.
-          </p>
-        </div>
-
-        <div className="mb-12">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Recent Prayer Requests</h2>
-            <button className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center">
-              <Heart size={20} className="mr-2" />
-              Add Prayer Request
-            </button>
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
+              <Heart className="h-6 w-6 text-blue-600" />
+              <h1 className="text-xl font-bold text-gray-900">Prayer Companion</h1>
+            </div>
+            <p className="text-sm text-gray-600">Let AI help guide your prayer time</p>
           </div>
+        </div>
+      </div>
 
-          <div className="space-y-6">
-            {prayerRequests.map((request) => (
-              <div key={request.id} className={`bg-white rounded-xl shadow-sm border p-6 ${request.isUrgent ? 'border-red-200 bg-red-50' : 'border-gray-200'}`}>
-                {request.isUrgent && (
-                  <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 mb-3">
-                    <Heart size={14} className="mr-1" />
-                    Urgent
-                  </div>
-                )}
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {request.title}
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  {request.description}
-                </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <div className="flex items-center">
-                      <Users size={14} className="mr-1" />
-                      {request.prayerCount} praying
-                    </div>
-                    <div className="flex items-center">
-                      <Clock size={14} className="mr-1" />
-                      {request.date}
-                    </div>
-                    <div>
-                      By {request.requestedBy}
-                    </div>
-                  </div>
-                  <button className="flex items-center text-blue-600 hover:text-blue-700 font-medium">
-                    <MessageCircle size={16} className="mr-1" />
-                    I&apos;m Praying
-                  </button>
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto p-6">
+        {/* AI Prayer Suggestions */}
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Suggested Prayer Topics</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            {suggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                className={`bg-white border rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
+                  selectedSuggestion === suggestion 
+                    ? 'border-blue-500 bg-blue-50 shadow-md' 
+                    : 'border-gray-200'
+                }`}
+                onClick={() => handleSuggestionSelect(suggestion)}
+              >
+                <div className="flex items-center mb-3">
+                  <Lightbulb className="h-5 w-5 text-blue-600 mr-2" />
+                  <h3 className="font-semibold text-gray-900 text-sm">{suggestion.topic}</h3>
+                </div>
+                <p className="text-xs text-gray-600 mb-3 leading-relaxed">{suggestion.prompt}</p>
+                <div className="flex items-center text-xs text-blue-600 font-medium">
+                  <BookOpen className="h-3 w-3 mr-1" />
+                  {suggestion.bibleVerse}
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center">
-          <Heart size={48} className="text-green-600 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-green-900 mb-2">
-            Enhanced Prayer System Coming Soon
-          </h3>
-          <p className="text-green-700 mb-4">
-            We&apos;re building a comprehensive prayer system where you can share requests, 
-            commit to pray for others, and share answered prayers.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
-              Share Testimony
+        {/* Prayer Input */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Prayer</h2>
+          <textarea
+            value={prayerContent}
+            onChange={(e) => setPrayerContent(e.target.value)}
+            placeholder="Write your prayer here, or select a suggestion above..."
+            className="w-full h-40 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-gray-500"
+          />
+          
+          <div className="flex justify-between items-center mt-4">
+            <div className="text-sm text-gray-500">
+              {selectedSuggestion && (
+                <span>Praying for: <strong>{selectedSuggestion.topic}</strong></span>
+              )}
+            </div>
+            <button
+              onClick={handleSubmitPrayer}
+              disabled={isModerating || !prayerContent.trim()}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+            >
+              {isModerating ? 'Checking...' : 'Share Prayer'}
             </button>
-            <button className="border border-green-600 text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-600 hover:text-white transition-colors">
-              Prayer Guide
-            </button>
+          </div>
+        </div>
+
+        {/* Prayer Insights */}
+        <div className="mt-8 bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Community Prayer Insights</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div className="bg-blue-50 rounded-lg p-4">
+              <div className="text-2xl font-bold text-blue-600">24</div>
+              <div className="text-sm text-gray-600 mt-1">Prayers Today</div>
+            </div>
+            <div className="bg-green-50 rounded-lg p-4">
+              <div className="text-2xl font-bold text-green-600">12</div>
+              <div className="text-sm text-gray-600 mt-1">Answered</div>
+            </div>
+            <div className="bg-purple-50 rounded-lg p-4">
+              <div className="text-2xl font-bold text-purple-600">3</div>
+              <div className="text-sm text-gray-600 mt-1">Trending Needs</div>
+            </div>
+            <div className="bg-orange-50 rounded-lg p-4">
+              <div className="text-2xl font-bold text-orange-600">47</div>
+              <div className="text-sm text-gray-600 mt-1">People Praying</div>
+            </div>
           </div>
         </div>
       </div>
