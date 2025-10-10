@@ -1,0 +1,276 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '@/redux/slices/authSlice'
+import { 
+  Church, 
+  User, 
+  LogOut, 
+  Menu, 
+  X,
+  Newspaper,
+  Heart,
+  Calendar,
+  DollarSign,
+  Users,
+  Bell,
+  LogIn,
+  UserPlus
+} from 'lucide-react'
+import type { RootState } from '@/redux/store'
+
+export default function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth)
+
+  const handleLogout = () => {
+    dispatch(logout())
+    router.push('/')
+    setIsMenuOpen(false)
+  }
+
+  // Define base navigation items for all users
+  const baseNavItems = [
+    { path: '/', label: 'Home', icon: Church },
+    { path: '/news', label: 'News', icon: Newspaper },
+    { path: '/prayer', label: 'Prayer', icon: Heart },
+    { path: '/events', label: 'Events', icon: Calendar },
+   
+    { path: '/donations', label: 'Give', icon: DollarSign },
+  ]
+
+  // Define authenticated user navigation items
+  const authNavItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: User },
+    { path: '/notifications', label: 'Notifications', icon: Bell },
+    { path: '/profile', label: 'Profile', icon: User },
+    { path: '/workers', label: 'Staff', icon: Users },
+  ]
+
+  // Combine navigation items based on authentication status
+  const navItems = isAuthenticated 
+    ? [...baseNavItems, ...authNavItems] 
+    : baseNavItems
+
+  // Check if we're on auth pages to show alternative auth button
+  const isOnAuthPage = pathname.startsWith('/auth')
+  const isOnLoginPage = pathname === '/auth/login'
+  const isOnRegisterPage = pathname === '/auth/register'
+
+  const isActivePath = (path: string) => {
+    if (path === '/') return pathname === '/'
+    return pathname.startsWith(path)
+  }
+
+  return (
+    <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo - Hide text on medium screens (md), show on mobile and large screens */}
+          <Link href="/" className="flex items-center space-x-2">
+            <Church className="h-8 w-8 text-blue-600" />
+            <span className="text-xl font-bold text-gray-900 md:hidden lg:inline">
+              ChurchApp
+            </span>
+          </Link>
+
+          <div className="hidden md:flex items-center space-x-8">
+            <div className="flex items-center space-x-6">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Link
+                    key={item.path}
+                    href={item.path}
+                    className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      isActivePath(item.path)
+                        ? 'text-blue-600 bg-blue-50'
+                        : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    {/* Show icons only on large screens, hide on medium screens */}
+                    <Icon size={16} className="hidden lg:block" />
+                    <span>{item.label}</span>
+                  </Link>
+                )
+              })}
+            </div>
+
+            <div className="flex items-center space-x-4 border-l border-gray-200 pl-6">
+              {isAuthenticated ? (
+                <>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <User size={16} className="text-blue-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">
+                      {user?.name}
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center space-x-1 px-3 py-2 text-sm text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                  >
+                    <LogOut size={16} className="hidden lg:block" />
+                    <span>Logout</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  {/* Show only ONE auth button when on auth pages */}
+                  {isOnAuthPage ? (
+                    isOnLoginPage ? (
+                      // On login page, show sign up button
+                      <Link
+                        href="/auth/register"
+                        className="flex items-center space-x-1 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                      >
+                        <UserPlus size={16} className="hidden lg:block" />
+                        <span>Sign Up</span>
+                      </Link>
+                    ) : isOnRegisterPage ? (
+                      // On register page, show sign in button
+                      <Link
+                        href="/auth/login"
+                        className="flex items-center space-x-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+                      >
+                        <LogIn size={16} className="hidden lg:block" />
+                        <span>Sign In</span>
+                      </Link>
+                    ) : null
+                  ) : (
+                    // Not on auth pages, show both buttons
+                    <>
+                      <Link
+                        href="/auth/login"
+                        className="flex items-center space-x-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                      >
+                        <LogIn size={16} className="hidden lg:block" />
+                        <span>Sign In</span>
+                      </Link>
+                      <Link
+                        href="/auth/register"
+                        className="flex items-center space-x-1 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                      >
+                        <UserPlus size={16} className="hidden lg:block" />
+                        <span>Sign Up</span>
+                      </Link>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {isMenuOpen && (
+          <div className="md:hidden border-t border-gray-200 py-4">
+            <div className="space-y-2">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Link
+                    key={item.path}
+                    href={item.path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                      isActivePath(item.path)
+                        ? 'text-blue-600 bg-blue-50'
+                        : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    {/* Icons always show in mobile menu */}
+                    <Icon size={20} />
+                    <span>{item.label}</span>
+                  </Link>
+                )
+              })}
+            </div>
+
+            <div className="border-t border-gray-200 mt-4 pt-4 space-y-2">
+              {isAuthenticated ? (
+                <>
+                  <div className="flex items-center space-x-3 px-3 py-2">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <User size={16} className="text-blue-600" />
+                    </div>
+                    <span className="text-base font-medium text-gray-700">
+                      {user?.name}
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center space-x-3 w-full px-3 py-2 text-base text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                  >
+                    <LogOut size={20} />
+                    <span>Logout</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  {/* Mobile: Show only ONE auth button when on auth pages */}
+                  {isOnAuthPage ? (
+                    isOnLoginPage ? (
+                      <Link
+                        href="/auth/register"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center space-x-3 px-3 py-2 text-base text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                      >
+                        <UserPlus size={20} />
+                        <span>Sign Up</span>
+                      </Link>
+                    ) : isOnRegisterPage ? (
+                      <Link
+                        href="/auth/login"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center space-x-3 px-3 py-2 text-base text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                      >
+                        <LogIn size={20} />
+                        <span>Sign In</span>
+                      </Link>
+                    ) : null
+                  ) : (
+                    // Not on auth pages, show both buttons in mobile
+                    <>
+                      <Link
+                        href="/auth/login"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center space-x-3 px-3 py-2 text-base text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                      >
+                        <LogIn size={20} />
+                        <span>Sign In</span>
+                      </Link>
+                      <Link
+                        href="/auth/register"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center space-x-3 px-3 py-2 text-base text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                      >
+                        <UserPlus size={20} />
+                        <span>Sign Up</span>
+                      </Link>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  )
+}

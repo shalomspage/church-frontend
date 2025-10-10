@@ -62,7 +62,7 @@ export default function About() {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4">
-                  <span className="text-white font-semibold text-sm">Worship Service</span>
+                  <span className="text-white font-semibold text-sm">Sunday Service</span>
                 </div>
               </div>
               <div className="relative h-32 rounded-xl overflow-hidden group">
@@ -73,7 +73,7 @@ export default function About() {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4">
-                  <span className="text-white font-semibold text-sm">Community</span>
+                  <span className="text-white font-semibold text-sm">Envangelism</span>
                 </div>
               </div>
             </div>
@@ -86,18 +86,18 @@ export default function About() {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4">
-                  <span className="text-white font-semibold text-sm">Prayer</span>
+                  <span className="text-white font-semibold text-sm">Free Indeed Service</span>
                 </div>
               </div>
               <div className="relative h-48 rounded-xl overflow-hidden group">
                 <Image
                   src="/images/homepage/bible-study.jpg"
-                  alt="Bible study and discipleship group"
+                  alt="Deliverance Service"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4">
-                  <span className="text-white font-semibold text-sm">Bible Study</span>
+                  <span className="text-white font-semibold text-sm">Deliverance Service</span>
                 </div>
               </div>
             </div>

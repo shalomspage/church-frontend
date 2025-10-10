@@ -1,9 +1,9 @@
-import ForgotPasswordForm from './components/ForgotPasswordForm'
+import RegisterForm from './components/RegisterForm'
 
-export default function ForgotPasswordPage() {
+export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <ForgotPasswordForm />
+      <RegisterForm />
     </div>
   )
 }

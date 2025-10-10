@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { prayerAgent, PrayerSuggestion, PrayerRequest } from '@/lib/agents/prayerAgent'
+import { prayerAgent, PrayerSuggestion, PrayerRequest } from '@/lib/agents/prayerAgent' // ADDED prayerAgent import
+import { bibleEventAgent, EventBiblePassage } from '@/lib/agents/bibleEventAgent'
 import { contentModerator } from '@/lib/agents/contentModerator'
 import { Heart, Lightbulb, BookOpen } from 'lucide-react'
 
@@ -29,9 +30,11 @@ const mockPrayerHistory: PrayerRequest[] = [
 
 export default function PrayerPage() {
   const [suggestions, setSuggestions] = useState<PrayerSuggestion[]>([])
+  const [biblePassages, setBiblePassages] = useState<EventBiblePassage[]>([])
   const [selectedSuggestion, setSelectedSuggestion] = useState<PrayerSuggestion | null>(null)
   const [prayerContent, setPrayerContent] = useState('')
   const [isModerating, setIsModerating] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     loadPrayerSuggestions()
@@ -39,8 +42,18 @@ export default function PrayerPage() {
 
   const loadPrayerSuggestions = async () => {
     try {
+      setLoading(true)
       const prayerSuggestions = await prayerAgent.suggestPrayerTopics(mockPrayerHistory)
       setSuggestions(prayerSuggestions)
+
+      // Load Bible passages for current events
+      try {
+        const passages = await bibleEventAgent.getBiblePassagesForEvents('world')
+        setBiblePassages(passages)
+      } catch (err) {
+        console.warn('Failed to load Bible passages:', err)
+        // Don't set biblePassages, so the section won't show
+      }
     } catch (error) {
       console.error('Failed to load prayer suggestions:', error)
       // Fallback suggestions
@@ -64,6 +77,8 @@ export default function PrayerPage() {
           category: 'healing'
         }
       ])
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -74,7 +89,6 @@ export default function PrayerPage() {
       setPrayerContent(prompt)
     } catch (error) {
       console.error('Failed to generate prayer prompt:', error)
-      // Fallback prompt
       setPrayerContent(`Heavenly Father, I come to you with ${suggestion.topic.toLowerCase()}. Please guide me and bless this situation according to your will. Amen.`)
     }
   }
@@ -94,14 +108,27 @@ export default function PrayerPage() {
         return
       }
 
-      // Submit prayer (your existing API call)
-      console.log('Submitting prayer:', prayerContent)
-      // Add your API call here
-      
-      // Reset form
-      setPrayerContent('')
-      setSelectedSuggestion(null)
-      alert('Prayer submitted successfully!')
+      // Submit prayer to your API
+      const response = await fetch('/api/prayer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: selectedSuggestion?.topic || 'Personal Prayer',
+          content: prayerContent,
+          category: selectedSuggestion?.category || 'general'
+        })
+      })
+
+      if (response.ok) {
+        // Reset form
+        setPrayerContent('')
+        setSelectedSuggestion(null)
+        alert('Prayer submitted successfully!')
+      } else {
+        throw new Error('Failed to submit prayer')
+      }
       
     } catch (error) {
       console.error('Failed to submit prayer:', error)
@@ -109,6 +136,17 @@ export default function PrayerPage() {
     } finally {
       setIsModerating(false)
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Heart className="h-12 w-12 text-blue-600 mx-auto mb-4 animate-pulse" />
+          <div>Loading prayer suggestions...</div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -121,7 +159,7 @@ export default function PrayerPage() {
               <Heart className="h-6 w-6 text-blue-600" />
               <h1 className="text-xl font-bold text-gray-900">Prayer Companion</h1>
             </div>
-            <p className="text-sm text-gray-600">Let AI help guide your prayer time</p>
+            <p className="text-sm text-gray-600 hidden sm:block">Let AI help guide your prayer time</p>
           </div>
         </div>
       </div>
@@ -156,14 +194,42 @@ export default function PrayerPage() {
           </div>
         </div>
 
+        {/* Bible Passages for Current Events */}
+        {biblePassages.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">📖 Bible Passages for Current Events</h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {biblePassages.map((passage, index) => (
+                <div
+                  key={index}
+                  className="bg-white border rounded-lg p-4 shadow-sm hover:shadow-md transition-all"
+                >
+                  <h3 className="font-semibold text-gray-900 mb-2 text-sm">{passage.title}</h3>
+                  <div className="mb-3 p-3 bg-blue-50 rounded-lg">
+                    <div className="font-semibold text-blue-800 text-sm">{passage.biblePassage}</div>
+                    <div className="text-blue-700 text-xs mt-1 italic">&quot;{passage.bibleVerse}&quot;</div>
+                  </div>
+                  <p className="text-xs text-gray-600 mb-2">{passage.explanation}</p>
+                  <div className="flex justify-between items-center text-xs text-gray-500">
+                    <span className="capitalize bg-gray-100 px-2 py-1 rounded">{passage.category}</span>
+                    {passage.source && (
+                      <span>Source: {passage.source}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Prayer Input */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm mt-10">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Prayer</h2>
           <textarea
             value={prayerContent}
             onChange={(e) => setPrayerContent(e.target.value)}
             placeholder="Write your prayer here, or select a suggestion above..."
-            className="w-full h-40 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-gray-500"
+            className="w-full h-40 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
           />
           
           <div className="flex justify-between items-center mt-4">
