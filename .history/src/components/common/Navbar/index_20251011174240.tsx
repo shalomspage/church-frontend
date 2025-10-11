@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../../redux/slices/authSlice'
 import type { RootState } from '../../../redux/store'
-import { Church, Newspaper, Heart, Calendar, DollarSign } from 'lucide-react'
+import { Church, Newspaper, Heart, Calendar, DollarSign, User } from 'lucide-react'
 import DesktopNav from './DesktopNav'
 import MobileNav from './MobileNav'
 import { NavItem } from './types'
@@ -24,7 +24,7 @@ export default function Navbar() {
     setIsMenuOpen(false)
   }
 
-  // Only public navigation items - no dashboard/auth items
+  // Define navigation items - REMOVED dashboard items
   const navItems: NavItem[] = [
     { path: '/', label: 'Home', icon: Church },
     { path: '/news', label: 'News', icon: Newspaper },
@@ -32,6 +32,13 @@ export default function Navbar() {
     { path: '/events', label: 'Events', icon: Calendar },
     { path: '/donations', label: 'Give', icon: DollarSign },
   ]
+
+  // Only show profile link for authenticated users
+  const authNavItems: NavItem[] = isAuthenticated 
+    ? [{ path: '/dashboard', label: 'Dashboard', icon: User }]
+    : []
+
+  const allNavItems = [...navItems, ...authNavItems]
 
   const isActivePath = (path: string) => {
     if (path === '/') return pathname === '/'
@@ -51,7 +58,7 @@ export default function Navbar() {
           </Link>
 
           <DesktopNav
-            navItems={navItems}
+            navItems={allNavItems}
             isActivePath={isActivePath}
             isAuthenticated={isAuthenticated}
             user={user}
@@ -59,7 +66,7 @@ export default function Navbar() {
           />
 
           <MobileNav
-            navItems={navItems}
+            navItems={allNavItems}
             isActivePath={isActivePath}
             isAuthenticated={isAuthenticated}
             user={user}
