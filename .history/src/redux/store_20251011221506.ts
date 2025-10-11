@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 import { authApi } from '@/services/authApi'
 import { newsApi } from '@/services/newsApi'
 import { prayerApi } from '@/services/prayerApi'
@@ -11,7 +11,7 @@ import authSlice from './slices/authSlice'
 const authPersistConfig = {
   key: 'auth',
   storage,
-  whitelist: ['user', 'isAuthenticated', 'token']
+  whitelist: ['user', 'isAuthenticated', 'token'] // only persist these fields
 }
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authSlice)

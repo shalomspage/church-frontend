@@ -63,12 +63,7 @@ export default function DashboardSidebar({ isOpen, onClose }: DashboardSidebarPr
             <Church className="h-8 w-8 text-blue-600" />
             <span className="text-xl font-bold text-gray-900">ChurchApp</span>
           </Link> */}
-          <button
-            onClick={onClose}
-            className="lg:hidden text-gray-500 hover:text-gray-600"
-          >
-            <X size={20} />
-          </button>
+         
         </div>
 
         {/* Navigation */}

@@ -39,7 +39,7 @@ export default function MobileNav({
           />
           
           {/* Mobile Menu Panel */}
-          <div className="fixed top-0 left-0 bottom-0 w-4/5 max-w-sm bg-white shadow-lg z-50 md:hidden transform transition-transform duration-300 ease-in-out">
+          <div className="fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-white shadow-lg z-50 md:hidden transform transition-transform duration-300 ease-in-out">
             <div className="flex flex-col h-full">
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
