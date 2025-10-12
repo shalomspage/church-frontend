@@ -98,8 +98,8 @@ export default function RegisterForm() {
 
   // Show registration form
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-8">
+    <div className="w-full max-w-md mx-auto backdrop-blur-md">
+      <div className="backdrop-blur-md rounded-2xl shadow-lg border border-gray-100 p-8">
         <FormHeader
           title="Create Account"
           subtitle="Join our church community"
