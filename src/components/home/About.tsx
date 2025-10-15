@@ -67,20 +67,20 @@ export default function About() {
               </div>
               <div className="relative h-32 rounded-xl overflow-hidden group">
                 <Image
-                  src="/images/homepage/community.jpg"
+                  src="/images/homepage/evangelism.jpg"
                   alt="Church community fellowship and connection"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4">
-                  <span className="text-white font-semibold text-sm">Envangelism</span>
+                  <span className="text-white font-semibold text-sm">Evangelism</span>
                 </div>
               </div>
             </div>
             <div className="space-y-4 pt-8">
               <div className="relative h-32 rounded-xl overflow-hidden group">
                 <Image
-                  src="/images/homepage/prayer-group.jpg"
+                  src="/images/homepage/freeindeed-s.jpg"
                   alt="Prayer group gathering and intercession"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -91,7 +91,7 @@ export default function About() {
               </div>
               <div className="relative h-48 rounded-xl overflow-hidden group">
                 <Image
-                  src="/images/homepage/bible-study.jpg"
+                  src="/images/homepage/deliverance.jpg"
                   alt="Deliverance Service"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"

@@ -6,6 +6,7 @@ import { newsApi } from '@/services/newsApi'
 import { prayerApi } from '@/services/prayerApi'
 import { donationsApi } from '@/services/donationsApi'
 import authSlice from './slices/authSlice'
+import { rsvpSlice } from './slices/rsvpSlice'
 
 // Persist config for auth slice only
 const authPersistConfig = {
@@ -18,6 +19,7 @@ const persistedAuthReducer = persistReducer(authPersistConfig, authSlice)
 
 export const store = configureStore({
   reducer: {
+    rsvp: rsvpSlice.reducer,
     auth: persistedAuthReducer,
     [authApi.reducerPath]: authApi.reducer,
     [newsApi.reducerPath]: newsApi.reducer,
