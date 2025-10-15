@@ -19,7 +19,7 @@ export default function NewsPage() {
         </div>
 
         {/* Stats */}
-        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white rounded-xl p-6 text-center shadow-sm border border-gray-200">
             <Newspaper className="text-blue-600 mx-auto mb-3" size={32} />
             <div className="text-2xl font-bold text-gray-900">{allPosts.length}</div>
@@ -39,7 +39,7 @@ export default function NewsPage() {
             </div>
             <div className="text-gray-600">Total Likes</div>
           </div>
-        </div> */}
+        </div>
 
         {/* Featured Posts */}
         <div className="mb-12">
