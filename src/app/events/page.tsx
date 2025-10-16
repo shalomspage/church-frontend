@@ -24,13 +24,13 @@ export default function EventsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-4">
             Church Events
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Discover all upcoming services, meetings, and special events in our church community.
           </p>
-          <div className="mt-4 text-lg text-blue-600 font-semibold">
+          <div className="mt-4 text-md text-blue-600 font-semibold">
             {upcomingEvents.length} Upcoming Events
           </div>
         </div>

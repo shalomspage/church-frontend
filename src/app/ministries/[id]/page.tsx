@@ -3,13 +3,14 @@ import { ministries } from '@/data/ministries'
 import Image from 'next/image'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-export default function MinistryDetailPage({ params }: PageProps) {
-  const ministry = ministries.find(m => m.id === params.id)
+export default async function MinistryDetailPage({ params }: PageProps) {
+  const { id } = await params // ✅ await the params here
+  const ministry = ministries.find(m => m.id === id)
 
   if (!ministry) {
     notFound()
@@ -26,15 +27,15 @@ export default function MinistryDetailPage({ params }: PageProps) {
             className="object-cover"
           />
         </div>
-        
+
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           {ministry.title}
         </h1>
-        
+
         <p className="text-xl text-gray-600 mb-8">
           {ministry.description}
         </p>
-        
+
         <div className="prose prose-lg max-w-none">
           {/* Add detailed content for each ministry here */}
           <p>More details about this ministry coming soon...</p>
@@ -44,7 +45,7 @@ export default function MinistryDetailPage({ params }: PageProps) {
   )
 }
 
-// Generate static paths for all ministries
+// ✅ Static params generation stays the same
 export async function generateStaticParams() {
   return ministries.map((ministry) => ({
     id: ministry.id,

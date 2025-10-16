@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { rsvpToEvent, cancelRsvp } from '@/redux/slices/rsvpSlice'
 import { useState, useEffect } from 'react'
+import ShareModal from '@/components/shared/ShareModal'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -18,7 +19,7 @@ export default function EventDetailPage({ params }: PageProps) {
   const rsvpEvents = useAppSelector((state) => state.rsvp.rsvpEvents)
   const eventCounts = useAppSelector((state) => state.rsvp.eventCounts)
   const [isRsvping, setIsRsvping] = useState(false)
-  const [showShareOptions, setShowShareOptions] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
 
   // Resolve the params promise
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function EventDetailPage({ params }: PageProps) {
   // Show loading state while params are being resolved
   if (!resolvedParams) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 py-4">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -90,7 +91,7 @@ export default function EventDetailPage({ params }: PageProps) {
         console.log('Error sharing:', err)
       }
     } else {
-      setShowShareOptions(true)
+      setShowShareModal(true)
     }
   }
 
@@ -103,84 +104,109 @@ export default function EventDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-4">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <Link 
           href="/events"
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors"
+          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
         >
-          <ArrowLeft size={20} className="mr-2" />
+          <ArrowLeft size={18} className="mr-2" />
           Back to All Events
         </Link>
 
         {/* Event Card */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${typeStyles[event.type]}`}>
-              {event.type} Event
-            </span>
-            <div className="flex items-center text-lg text-gray-600 font-semibold">
-              <Calendar size={20} className="mr-2" />
-              {new Date(event.date).toLocaleDateString('en-US', { 
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 p-4 sm:p-6 lg:p-8">
+          {/* Header - Mobile Layout */}
+          <div className="block sm:hidden mb-4">
+            <div className="flex flex-col gap-2 mb-4">
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${typeStyles[event.type]} self-start`}>
+                {event.type} Event
+              </span>
+              <div className="flex items-center text-sm text-gray-600">
+                <Calendar size={16} className="mr-1" />
+                {new Date(event.date).toLocaleDateString('en-US', { 
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
+              </div>
             </div>
+            
+            <h1 className="text-xl font-bold text-gray-900 mb-3">
+              {event.title}
+            </h1>
+            
+            <p className="text-base text-gray-600 leading-relaxed">
+              {event.description}
+            </p>
+          </div>
+
+          {/* Header - Desktop Layout */}
+          <div className="hidden sm:block">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 mb-4">
+              <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${typeStyles[event.type]} self-start lg:self-auto`}>
+                {event.type} Event
+              </span>
+              <div className="flex items-center text-base lg:text-lg text-gray-600 font-semibold">
+                <Calendar size={18} className="mr-2" />
+                {new Date(event.date).toLocaleDateString('en-US', { 
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </div>
+            </div>
+            
+            <h1 className="text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 mb-4">
+              {event.title}
+            </h1>
+            
+            <p className="text-lg lg:text-xl text-gray-600 mb-6 lg:mb-8 leading-relaxed">
+              {event.description}
+            </p>
           </div>
           
-          {/* Title */}
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            {event.title}
-          </h1>
-          
-          {/* Description */}
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            {event.description}
-          </p>
-          
           {/* Event Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="space-y-4">
-              <div className="flex items-center text-lg text-gray-700">
-                <Clock size={24} className="mr-4 text-blue-500" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex items-center text-base sm:text-lg text-gray-700">
+                <Clock size={20} className="mr-3 sm:mr-4 text-blue-500 flex-shrink-0" />
                 <div>
                   <div className="font-semibold">{event.time}</div>
                   {event.duration && (
-                    <div className="text-sm text-gray-500">Duration: {event.duration}</div>
+                    <div className="text-xs sm:text-sm text-gray-500">Duration: {event.duration}</div>
                   )}
                 </div>
               </div>
               
-              <div className="flex items-center text-lg text-gray-700">
-                <MapPin size={24} className="mr-4 text-green-500" />
+              <div className="flex items-center text-base sm:text-lg text-gray-700">
+                <MapPin size={20} className="mr-3 sm:mr-4 text-green-500 flex-shrink-0" />
                 <div>
                   <div className="font-semibold">{event.location}</div>
-                  <div className="text-sm text-gray-500">Location</div>
+                  <div className="text-xs sm:text-sm text-gray-500">Location</div>
                 </div>
               </div>
             </div>
             
-            <div className="space-y-4">
-              <div className="flex items-center text-lg text-gray-700">
-                <Users size={24} className="mr-4 text-purple-500" />
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex items-center text-base sm:text-lg text-gray-700">
+                <Users size={20} className="mr-3 sm:mr-4 text-purple-500 flex-shrink-0" />
                 <div>
                   <div className="font-semibold">{currentRsvpCount} RSVPs</div>
                   {event.capacity && (
-                    <div className="text-sm text-gray-500">
-                      {event.capacity - currentRsvpCount} spots remaining
+                    <div className="text-xs sm:text-sm text-gray-500">
+                      {Math.max(0, event.capacity - currentRsvpCount)} spots remaining
                     </div>
                   )}
                 </div>
               </div>
               
               {event.contactPerson && (
-                <div className="text-lg text-gray-700">
+                <div className="text-base sm:text-lg text-gray-700">
                   <div className="font-semibold">Contact Person</div>
-                  <div className="text-gray-600">{event.contactPerson}</div>
+                  <div className="text-gray-600 text-sm sm:text-base">{event.contactPerson}</div>
                 </div>
               )}
             </div>
@@ -188,10 +214,10 @@ export default function EventDetailPage({ params }: PageProps) {
           
           {/* RSVP Status */}
           {hasUserRsvp && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
               <div className="flex items-center">
-                <Check size={20} className="text-green-600 mr-2" />
-                <span className="text-green-800 font-semibold">
+                <Check size={16} className="text-green-600 mr-2 flex-shrink-0" />
+                <span className="text-green-800 font-semibold text-sm sm:text-base">
                   You're attending this event!
                 </span>
               </div>
@@ -199,10 +225,10 @@ export default function EventDetailPage({ params }: PageProps) {
           )}
           
           {isFull && !hasUserRsvp && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
               <div className="flex items-center">
-                <Users size={20} className="text-red-600 mr-2" />
-                <span className="text-red-800 font-semibold">
+                <Users size={16} className="text-red-600 mr-2 flex-shrink-0" />
+                <span className="text-red-800 font-semibold text-sm sm:text-base">
                   This event is at capacity. Join the waitlist or check back for cancellations.
                 </span>
               </div>
@@ -210,11 +236,11 @@ export default function EventDetailPage({ params }: PageProps) {
           )}
           
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-6 border-t border-gray-200">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
             <button 
               onClick={handleRsvp}
               disabled={isDisabled}
-              className={`flex-1 py-4 px-6 rounded-xl font-semibold text-lg transition-colors flex items-center justify-center ${
+              className={`flex-1 py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl font-semibold text-base transition-colors flex items-center justify-center ${
                 hasUserRsvp
                   ? 'bg-green-600 text-white hover:bg-green-700'
                   : isFull
@@ -226,7 +252,7 @@ export default function EventDetailPage({ params }: PageProps) {
                 'Processing...'
               ) : hasUserRsvp ? (
                 <>
-                  <Check size={20} className="mr-2" />
+                  <Check size={18} className="mr-2" />
                   You're Attending
                 </>
               ) : isFull ? (
@@ -238,46 +264,22 @@ export default function EventDetailPage({ params }: PageProps) {
             
             <button 
               onClick={handleShare}
-              className="flex-1 border border-blue-600 text-blue-600 py-4 px-6 rounded-xl font-semibold text-lg hover:bg-blue-50 transition-colors flex items-center justify-center"
+              className="flex-1 border border-blue-600 text-blue-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl font-semibold text-base hover:bg-blue-50 transition-colors flex items-center justify-center"
             >
-              <Share2 size={20} className="mr-2" />
+              <Share2 size={18} className="mr-2" />
               Share Event
             </button>
           </div>
-
-          {/* Share Options Modal */}
-          {showShareOptions && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-2xl p-6 max-w-sm mx-4">
-                <h3 className="text-lg font-semibold mb-4">Share Event</h3>
-                <p className="text-gray-600 mb-4">Copy the link to share:</p>
-                <div className="flex space-x-2">
-                  <input 
-                    type="text" 
-                    value={window.location.href}
-                    readOnly
-                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                  />
-                  <button 
-                    onClick={() => {
-                      navigator.clipboard.writeText(window.location.href)
-                      setShowShareOptions(false)
-                    }}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold"
-                  >
-                    Copy
-                  </button>
-                </div>
-                <button 
-                  onClick={() => setShowShareOptions(false)}
-                  className="w-full mt-4 border border-gray-300 text-gray-700 py-2 rounded-lg font-semibold"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* Share Modal */}
+        <ShareModal
+          isOpen={showShareModal}
+          onClose={() => setShowShareModal(false)}
+          title="Event"
+          shareText="Copy the link to share this event:"
+          url={typeof window !== 'undefined' ? window.location.href : ''}
+        />
       </div>
     </div>
   )

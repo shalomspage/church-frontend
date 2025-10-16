@@ -7,7 +7,7 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-6">
               Welcome to Our Church Family
             </h2>
             <p className="text-lg text-gray-600 mb-6 leading-relaxed">
