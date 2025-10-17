@@ -44,7 +44,7 @@ export default function About() {
                 Learn More About Us
               </Link>
               <Link 
-                href="/visit"
+                href="/events"
                 className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg font-semibold transition-colors text-center"
               >
                 Plan Your Visit

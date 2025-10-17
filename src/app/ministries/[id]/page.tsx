@@ -28,7 +28,7 @@ export default async function MinistryDetailPage({ params }: PageProps) {
           />
         </div>
 
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-4">
           {ministry.title}
         </h1>
 

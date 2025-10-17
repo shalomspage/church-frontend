@@ -7,10 +7,10 @@ export default function MinistriesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
             All Ministries
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Explore all the ministries and programs at our church. There's a place for everyone to grow, serve, and connect.
           </p>
         </div>

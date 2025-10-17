@@ -33,12 +33,12 @@ export default function Hero() {
           >
             Join Our Community
           </Link>
-          <Link 
+          {/* <Link 
             href="/events"
             className="border-2 border-white hover:bg-white hover:text-blue-900 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-300"
           >
             View Services
-          </Link>
+          </Link> */}
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-8 border-t border-blue-400">
