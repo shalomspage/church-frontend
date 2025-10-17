@@ -116,12 +116,12 @@ export default function NewsDetailPage({ params }: PageProps) {
               </div>
             </div>
             
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl lg:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {post.title}
             </h1>
             
             <div className="flex items-center justify-between">
-              <div className="flex items-center text-lg text-gray-600">
+              <div className="flex items-center text-sm text-gray-600">
                 <User size={20} className="mr-2" />
                 By {post.author}
               </div>
@@ -133,7 +133,7 @@ export default function NewsDetailPage({ params }: PageProps) {
                     isLiked ? 'text-red-600' : 'text-gray-500 hover:text-red-600'
                   }`}
                 >
-                  <Heart size={24} fill={isLiked ? 'currentColor' : 'none'} />
+                  <Heart size={18} fill={isLiked ? 'currentColor' : 'none'} />
                   <span className="font-semibold">{likeCount}</span>
                 </button>
 
@@ -141,7 +141,7 @@ export default function NewsDetailPage({ params }: PageProps) {
                   onClick={handleShare}
                   className="flex items-center gap-2 text-lg text-gray-500 hover:text-blue-600 transition-colors"
                 >
-                  <Share2 size={24} />
+                  <Share2 size={18} />
                   <span className="font-semibold">Share</span>
                 </button>
               </div>

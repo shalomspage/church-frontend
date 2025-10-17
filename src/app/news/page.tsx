@@ -10,10 +10,10 @@ export default function NewsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-4">
             Church News & Updates
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Stay informed with the latest sermons, announcements, prayer points, and testimonies from our church community.
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function NewsPage() {
 
         {/* Featured Posts */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Posts</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-6">Featured Posts</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredPosts.map((post) => (
               <NewsCard key={post.id} post={post} />
@@ -53,7 +53,7 @@ export default function NewsPage() {
 
         {/* All Posts */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">All Updates</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-6">All Updates</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             {allPosts.map((post) => (
               <NewsCard key={post.id} post={post} />
