@@ -74,7 +74,7 @@ export default function EventCard({ event }: EventCardProps) {
         {event.title}
       </h3>
       
-      <p className="text-gray-600 mb-4 leading-relaxed">
+      <p className="text-gray-600 mb-4 leading-relaxed text-lg">
         {event.description}
       </p>
       

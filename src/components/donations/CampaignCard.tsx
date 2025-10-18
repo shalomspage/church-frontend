@@ -10,7 +10,7 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
           {campaign.title}
         </h3>
-        <p className="text-gray-600 mb-4 text-sm">
+        <p className="text-gray-600 mb-4 text-lg">
           {campaign.description}
         </p>
         

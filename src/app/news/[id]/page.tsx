@@ -189,7 +189,7 @@ export default function NewsDetailPage({ params }: PageProps) {
               </p>
               <div className="text-gray-700 leading-relaxed">
                 {post.content.split('\n').map((paragraph, index) => (
-                  <p key={index} className="mb-4">
+                  <p key={index} className="mb-4 text-lg">
                     {paragraph}
                   </p>
                 ))}
@@ -199,7 +199,7 @@ export default function NewsDetailPage({ params }: PageProps) {
             {/* Prayer Points */}
             {post.prayerPoints.length > 0 && (
               <div className="bg-gray-50 rounded-xl p-6 mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                   <BookOpen size={24} className="mr-3 text-blue-600" />
                   Prayer Points
                 </h3>
@@ -207,7 +207,7 @@ export default function NewsDetailPage({ params }: PageProps) {
                   {post.prayerPoints.map((point, index) => (
                     <li key={index} className="flex items-start text-gray-700">
                       <span className="text-blue-500 font-semibold mr-3 mt-1">{index + 1}.</span>
-                      <span className="leading-relaxed">{point}</span>
+                      <span className="leading-relaxed text-lg">{point}</span>
                     </li>
                   ))}
                 </ul>

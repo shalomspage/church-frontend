@@ -181,11 +181,11 @@ export default function TestimonyCard({ testimony, compact = false }: TestimonyC
           </div>
 
           {/* Testimony Content */}
-          <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+          <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
             {testimony.title}
           </h3>
 
-          <p className="text-gray-600 mb-4 line-clamp-3">
+          <p className="text-gray-600 mb-4 line-clamp-3 text-lg">
             {testimony.excerpt}
           </p>
 

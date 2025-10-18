@@ -49,7 +49,7 @@ export default function EventsPage() {
           <div className="text-center py-16">
             <Calendar size={64} className="text-gray-400 mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-gray-600 mb-2">No Upcoming Events</h3>
-            <p className="text-gray-500 max-w-md mx-auto">
+            <p className="text-gray-500 max-w-md mx-auto text-lg">
               We're currently planning our next events. Please check back soon or contact the church office for information about upcoming activities.
             </p>
           </div>
@@ -61,7 +61,7 @@ export default function EventsPage() {
           <h3 className="text-2xl font-bold text-purple-900 mb-2">
             Stay Connected
           </h3>
-          <p className="text-purple-700 mb-4">
+          <p className="text-purple-700 mb-4 text-lg">
             Never miss an event! Subscribe to our newsletter or download the church app for updates and reminders.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -40,7 +40,7 @@ export default function EventDetailPage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading event details...</p>
+            <p className="text-gray-600 text-lg">Loading event details...</p>
           </div>
         </div>
       </div>

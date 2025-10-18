@@ -36,7 +36,7 @@ export default function MinistryCard({ ministry, size = 'large' }: MinistryCardP
       <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
         {ministry.title}
       </h3>
-      <p className="text-gray-600 mb-4 leading-relaxed">
+      <p className="text-gray-600 mb-4 leading-relaxed text-lg">
         {ministry.description}
       </p>
       <div className="text-blue-600 font-semibold flex items-center group-hover:translate-x-1 transition-transform">
